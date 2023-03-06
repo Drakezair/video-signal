@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { signal, computed, effect, batch } from "@preact/signals-react";
 
-function App() {
+const count = signal(0);
+const doubleCount = computed(() => count.value * 2);
+
+effect(() => console.log("el valor de count es: ", count.value));
+
+const name = signal("Luis");
+const age = signal(23);
+
+const updateInfo = () =>
+  batch(() => {
+    name.value = "Eduardo";
+    age.value = 24;
+  });
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={updateInfo}>
+        Hola soy {name.value} y tengo {age.value} años de edad
+      </button>
+      <button onClick={() => count.value++}>
+        el valor es: {count.value}, doble count es: {doubleCount.value}
+      </button>
+    </>
   );
 }
-
-export default App;
